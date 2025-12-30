@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="tk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Filologiya we Edebi Gatnaşyklar</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #581c87 0%, #1e3a8a 50%, #312e81 100%);
+            min-height: 100vh;
+            color: #fff;
+        }
+
+        header {
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(168, 85, 247, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            padding: 24px;
+        }
+
+        .header-content {
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .header-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+        }
+
+        .header-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 28px;
+            font-weight: bold;
+            background: linear-gradient(to right, #c084fc, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .lang-buttons {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .lang-btn {
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: rgba(255, 255, 255, 0.1);
+            color: #d1d5db;
+        }
+
+        .lang-btn.active {
+            background: linear-gradient(to right, #9333ea, #db2777);
+            color: white;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .lang-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        main {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 48px 24px;
+        }
+
+        .grid-3 {
+            display: grid;
+            gap: 32px;
+            grid-template-columns: 1fr 1fr 1fr;
+        }
+
+        .left-panel {
+            grid-column: span 2;
+        }
+
+        .subtitle {
+            color: #d1d5db;
+            font-size: 18px;
+            margin-bottom: 32px;
+        }
+
+        .search-box {
+            position: relative;
+            margin-bottom: 48px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 16px 16px 16px 44px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 12px;
+            color: white;
+            font-size: 16px;
+            backdrop-filter: blur(10px);
+        }
+
+        .search-box input::placeholder {
+            color: #9ca3af;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: #a855f7;
+        }
+
+        .content-grid {
+            display: grid;
+            gap: 16px;
+            grid-template-columns: repeat(2, 1fr);
+            margin-bottom: 48px;
+        }
+
+        .content-card {
+            padding: 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .content-card:hover {
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        .content-card.active {
+            background: linear-gradient(135deg, #a855f7, #ec4899);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            transform: scale(1.05);
+        }
+
+        .content-card h3 {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .content-card p {
+            color: #d1d5db;
+            font-size: 12px;
+            margin-bottom: 12px;
+        }
+
+        .audio-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #c084fc;
+            font-size: 12px;
+        }
+
+        .audio-player-section {
+            margin-top: 48px;
+            background: linear-gradient(to right, rgba(168, 85, 247, 0.4), rgba(236, 72, 153, 0.4));
+            backdrop-filter: blur(10px);
+            padding: 32px;
+            border-radius: 24px;
+            border: 1px solid rgba(168, 85, 247, 0.5);
+        }
+
+        .audio-player-section h3 {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .audio-player-section p {
+            color: #d1d5db;
+            font-size: 14px;
+            margin-bottom: 24px;
+            line-height: 1.6;
+        }
+
+        .audio-controls {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 24px;
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .play-btn {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: linear-gradient(to right, #a855f7, #ec4899);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            flex-shrink: 0;
+            transition: all 0.2s;
+        }
+
+        .play-btn:hover {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            transform: scale(1.1);
+        }
+
+        .progress-container {
+            flex: 1;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #4b5563;
+            border-radius: 4px;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(to right, #a855f7, #ec4899);
+            width: 0%;
+            transition: width 0.1s;
+        }
+
+        .time-display {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #9ca3af;
+            margin-top: 8px;
+        }
+
+        .volume-control {
+            position: relative;
+        }
+
+        .volume-btn {
+            background: none;
+            border: none;
+            color: #a855f7;
+            cursor: pointer;
+            font-size: 20px;
+            transition: color 0.2s;
+        }
+
+        .volume-btn:hover {
+            color: #d8b4fe;
+        }
+
+        .volume-slider {
+            position: absolute;
+            bottom: 48px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            padding: 12px;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .volume-slider.show {
+            display: block;
+        }
+
+        .volume-slider input {
+            width: 96px;
+            height: 8px;
+            cursor: pointer;
+        }
+
+        .right-panel {
+            background: linear-gradient(180deg, rgba(168, 85, 247, 0.4), rgba(236, 72, 153, 0.4));
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            border: 1px solid rgba(168, 85, 247, 0.5);
+            height: 600px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .chat-header {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 16px;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.3);
+        }
+
+        .chat-header h3 {
+            font-size: 18px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .chat-messages.empty {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .empty-state {
+            text-align: center;
+            color: #9ca3af;
+        }
+
+        .message {
+            display: flex;
+            margin-bottom: 8px;
+        }
+
+        .message.user {
+            justify-content: flex-end;
+        }
+
+        .message.assistant {
+            justify-content: flex-start;
+        }
+
+        .message-content {
+            max-width: 80%;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .message.user .message-content {
+            background: #7c3aed;
+            color: white;
+        }
+
+        .message.assistant .message-content {
+            background: rgba(255, 255, 255, 0.1);
+            color: #e5e7eb;
+        }
+
+        .chat-input-area {
+            border-top: 1px solid rgba(168, 85, 247, 0.3);
+            padding: 16px;
+            background: rgba(0, 0, 0, 0.2);
+            display: flex;
+            gap: 8px;
+        }
+
+        .chat-input-area input {
+            flex: 1;
+            padding: 8px 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 8px;
+            color: white;
+            font-size: 14px;
+        }
+
+        .chat-input-area input::placeholder {
+            color: #9ca3af;
+        }
+
+        .chat-input-area input:focus {
+            outline: none;
+            border-color: #a855f7;
+        }
+
+        .send-btn {
+            padding: 8px 16px;
+            background: linear-gradient(to right, #7c3aed, #db2777);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .send-btn:hover {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .send-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        footer {
+            border-top: 1px solid rgba(168, 85, 247, 0.3);
+            background: rgba(0, 0, 0, 0.4);
+            margin-top: 64px;
+            padding: 32px 24px;
+            text-align: center;
+            color: #9ca3af;
+            font-size: 14px;
+        }
+
+        @media (max-width: 1024px) {
+            .grid-3 {
+                grid-template-columns: 1fr;
+            }
+            .left-panel {
+                grid-column: span 1;
+            }
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .loader {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <div class="header-top">
+                <div class="header-title">
+                    <span>📚</span>
+                    <span id="pageTitle">Filologiya we Edebi Gatnaşyklar</span>
+                </div>
+                <span style="font-size: 24px;">🌍</span>
+            </div>
+            <div class="lang-buttons" id="langButtons"></div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="grid-3">
+            <!-- Left Panel -->
+            <div class="left-panel">
+                <p class="subtitle" id="subtitle">Köp dilli edebi talymy öwren</p>
+
+                <!-- Search Box -->
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="Gözle..." style="padding-left: 44px;">
+                    <span style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: #9ca3af;">🔍</span>
+                </div>
+
+                <!-- Content Grid -->
+                <div class="content-grid" id="contentGrid"></div>
+
+                <!-- Audio Player Section -->
+                <div class="audio-player-section" id="audioSection" style="display: none;">
+                    <h3 id="audioTitle"></h3>
+                    <p id="audioText"></p>
+
+                    <div class="audio-controls">
+                        <button class="play-btn" id="playBtn">▶</button>
+                        <div class="progress-container">
+                            <p style="font-size: 12px; color: #d1d5db; margin-bottom: 8px;">Ses okinýa...</p>
+                            <div class="progress-bar" id="progressBar">
+                                <div class="progress-fill" id="progressFill"></div>
+                            </div>
+                            <div class="time-display">
+                                <span id="currentTime">0:00</span>
+                                <span>Ses akmak</span>
+                            </div>
+                        </div>
+                        <div class="volume-control">
+                            <button class="volume-btn" id="volumeBtn">🔊</button>
+                            <div class="volume-slider" id="volumeSlider">
+                                <input type="range" id="volumeSlider" min="0" max="1" step="0.1" value="1" style="width: 100%; cursor: pointer;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Panel - Chat -->
+            <div class="right-panel">
+                <div class="chat-header">
+                    <h3>🤖 AI Ýolbaşçy</h3>
+                </div>
+
+                <div class="chat-messages empty" id="chatMessages">
+                    <div class="empty-state">
+                        <p style="font-size: 24px; margin-bottom: 16px;">🎤</p>
+                        <p id="emptyText">Filologiýa barada surag beriň...</p>
+                    </div>
+                </div>
+
+                <div class="chat-input-area">
+                    <input type="text" id="chatInput" placeholder="Surag ber..." style="padding-left: 12px;">
+                    <button class="send-btn" id="sendBtn">📤</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2025 Filologiya we Edebi Gatnaşyklar Platformasy | Köp Dilli Talymy Öwrenin</p>
+    </footer>
+
+    <script>
+        const translations = {
+            tk: {
+                title: 'Filologiya we Edebi Gatnaşyklar',
+                subtitle: 'Köp dilli edebi talymy öwren',
+                search: 'Gözle...',
+                chat: 'Surag ber...',
+                empty: 'Filologiýa barada surag beriň...',
+                topics: [
+                    {
+                        id: 1,
+                        title: 'Märheliler Arasyndaky Tasir',
+                        description: 'Türkmençe, Rus we Merkezi Aziýa edebyýatçylarynyn birbirlerine tasiri',
+                        fullText: 'Edebi gatnaşyklarynyn ıňlama tarihy boýunça filologlar 19-njy asyrdan başlap Türkmençe we Rus edebyýatçylarynyň birbirine täsir edip gelenidigini görkezeşdi. Bu tasir awtormatlary, stilistikany we tema saýlama üýtgetdi.'
+                    },
+                    {
+                        id: 2,
+                        title: 'Klassik Edebyýatynyň Ýahşylyklar',
+                        description: 'Adaş Gadab, Möhemmetnazar Qaýymly we başgalarynyň edebi miras',
+                        fullText: 'Adaş Gadab 19-njy asyryn oňa sarap beren edebyýatçylarynyň arasynda ýol açyp, şeýrin dilini höwesine täzejiledi. Onyn eserlerinde Merkezi Aziýa filologiýasynyň köp aýlanyşy köpetiniň zenan atymlar bilen çümleleşdi.'
+                    },
+                    {
+                        id: 3,
+                        title: 'Filologiýanyň Meselesi',
+                        description: 'Dilyň ösmegi we edebi normalar baradaky gözlegler',
+                        fullText: 'Filologiýa elminiň esasly meselesi dilyň dürli döwürde we mälimlik gatnaşyklarynda nädip üytgemegini düşünmektir. Edebi normalar durmuşynyň täsgisine görä aňa-sütlenedir we dilyň asly maglumat dörelmelerinden asyrlaşar.'
+                    },
+                    {
+                        id: 4,
+                        title: 'Söz Tählili we Semantika',
+                        description: 'Sözleriň meňisini we kolligini öwreniş',
+                        fullText: 'Semantikany öwrenmegiň esasy göýbilgi ol salynyň täp meňisini tapmakynyň we onuň dürli kontekstlarynda nädip ulanylýandygyny düşünmektir.'
+                    },
+                    {
+                        id: 5,
+                        title: 'Mergen Aýlanyşlygy',
+                        description: 'Edebi uslup we żanrlarynyň ösmegi',
+                        fullText: 'Edebi żanrlar durmuşynyň talaplary boýunça üleşip, täzejilip we aýlandyrylyp geldi. Şeýren, poezi, roman we drama şekilleri her döwürde başga-başga adymlary geçdi.'
+                    }
+                ]
+            },
+            ru: {
+                title: 'Филология и литературные связи',
+                subtitle: 'Изучайте многоязычную литературу',
+                search: 'Поиск...',
+                chat: 'Задайте вопрос...',
+                empty: 'Задайте вопрос о филологии...',
+                topics: [
+                    {
+                        id: 1,
+                        title: 'Влияние между поколениями',
+                        description: 'Влияние туркменской, русской и центральноазиатской литератур друг на друга',
+                        fullText: 'Историки литературы отмечают, что с 19-го века туркменская и русская литературы оказывали друг на друга значительное влияние. Это влияние изменило авторские стили, стилистику и выбор тем в произведениях писателей.'
+                    },
+                    {
+                        id: 2,
+                        title: 'Сокровища классической литературы',
+                        description: 'Литературное наследие Адаша Гадаба, Мухаммеднасра Кайымлы и других',
+                        fullText: 'Адаш Гадаб проложил путь среди литераторов 19-го века, обновив язык поэзии согласно своему вкусу. В его произведениях отражены многие аспекты центральноазиатской филологии с использованием архаичных терминов.'
+                    },
+                    {
+                        id: 3,
+                        title: 'Проблемы филологии',
+                        description: 'Развитие языка и исследования литературных норм',
+                        fullText: 'Основной задачей филологии является понимание того, как язык изменяется в разные периоды и в разных коммуникативных контекстах. Литературные нормы подвергаются влиянию образа жизни и отражают культурные ценности.'
+                    },
+                    {
+                        id: 4,
+                        title: 'Анализ слов и семантика',
+                        description: 'Изучение значения и смысла слов',
+                        fullText: 'Основная задача семантики - найти глубокое значение слова и понять, как оно используется в различных контекстах литературных произведений.'
+                    },
+                    {
+                        id: 5,
+                        title: 'Развитие литературных направлений',
+                        description: 'Эволюция литературных стилей и жанров',
+                        fullText: 'Литературные жанры развивались и трансформировались в соответствии с требованиями времени. Поэзия, проза, романы и драма прошли разные этапы развития в каждую эпоху.'
+                    }
+                ]
+            },
+            en: {
+                title: 'Philology and Literary Relations',
+                subtitle: 'Study multilingual literature',
+                search: 'Search...',
+                chat: 'Ask a question...',
+                empty: 'Ask a question about philology...',
+                topics: [
+                    {
+                        id: 1,
+                        title: 'Intergenerational Influences',
+                        description: 'The influence of Turkmen, Russian, and Central Asian literatures on each other',
+                        fullText: 'Literary historians note that since the 19th century, Turkmen and Russian literatures have exerted significant influence on each other. This influence changed authorial styles, stylistics, and thematic choices in literary works.'
+                    },
+                    {
+                        id: 2,
+                        title: 'Treasures of Classical Literature',
+                        description: 'Literary heritage of Adas Gadab, Muhammetnasa Qaymly and others',
+                        fullText: 'Adas Gadab paved the way among 19th-century literary figures, renewing the language of poetry according to his vision. His works reflect many aspects of Central Asian philology with the use of archaic terms.'
+                    },
+                    {
+                        id: 3,
+                        title: 'Philological Issues',
+                        description: 'Language development and literary norm research',
+                        fullText: 'The main task of philology is to understand how language changes across different periods and communication contexts. Literary norms are influenced by lifestyle and reflect cultural values.'
+                    },
+                    {
+                        id: 4,
+                        title: 'Word Analysis and Semantics',
+                        description: 'Study of word meaning and significance',
+                        fullText: 'The primary goal of semantics is to find the deep meaning of words and understand how they are used in various literary contexts and across different languages.'
+                    },
+                    {
+                        id: 5,
+                        title: 'Development of Literary Movements',
+                        description: 'Evolution of literary styles and genres',
+                        fullText: 'Literary genres evolved and transformed according to the demands of different eras. Poetry, prose, novels, and drama went through different stages of development in each period.'
+                    }
+                ]
+            },
+            kk: {
+                title: 'Филология және әдеби қатынастар',
+                subtitle: 'Көпбасамалы әдебиетті оқы',
+                search: 'Іздеу...',
+                chat: 'Сұрақ қой...',
+                empty: 'Филология туралы сұрақ қойыңыз...',
+                topics: [
+                    {
+                        id: 1,
+                        title: 'Ұрпақтар арасындағы ықпалы',
+                        description: 'Түркімен, орыс және Орталық Азия әдебиеттерінің өзара ықпалы',
+                        fullText: 'Әдеби істеушілер XIX ғасырдан бастап түркімен және орыс әдебиеттерінің бір-біріне айтарлықтай ықпал етіп келгенін атап өтеді. Бұл ықпал авторлық стильдерін, стилистикасын және әдеби шығындардағы тема таңдауын өзгертті.'
+                    },
+                    {
+                        id: 2,
+                        title: 'Классикалық әдебиеттің қазынасы',
+                        description: 'Адас Гадаб, Мұхаммет Наса Қайымлы және басқалардың әдеби мұрасы',
+                        fullText: 'Адас Гадаб XIX ғасырдың әдеби қайраткерлері арасында өз пайымының бойынша поезия тілін жаңарта отырып жол ашты. Оның туындыларында Орталық Азия филологиясының көптеген аспектілері ескі сөздер арқылы көрінеді.'
+                    },
+                    {
+                        id: 3,
+                        title: 'Филологиялық мәселелер',
+                        description: 'Тіл дамуы және әдеби нормалар зерттеуі',
+                        fullText: 'Филологияның негізгі міндеті тіл әр түрлі кезеңдерде және коммуникациялық контекстіңде қалай өзгеретінін түсіну болып табылады. Әдеби нормалар өмір салты арқылы ықпал тез түскен және мәдени құндылықтарды көрсетеді.'
+                    },
+                    {
+                        id: 4,
+                        title: 'Сөз талдауы және семантика',
+                        description: 'Сөздің мағынасын және маңызын зерттеу',
+                        fullText: 'Семантиканың негізгі мақсаты сөздердің терең мағынасын табу және оларды әр түрлі әдеби контекстте қалай қолданылатынын түсіну болып табылады.'
+                    },
+                    {
+                        id: 5,
+                        title: 'Әдеби ағымдардың дамуы',
+                        description: 'Әдеби стильдер мен жанрларының эволюциясы',
+                        fullText: 'Әдеби жанрлар әр кезеңнің талаптарына сәйкес өндіктелген және түрленген. Поэзия, проза, романдар және драма әр дәуірде өндіктеліктің түрлі сатыларынан өтті.'
+                    }
+                ]
+            },
+            uz: {
+                title: 'Filologiya va adabiy munosabatlar',
+                subtitle: 'Ko\'p tilli adabiyotni o\'rganing',
+                search: 'Qidirish...',
+                chat: 'Savol bering...',
+                empty: 'Filologiya haqida savol bering...',
+                topics: [
+                    {
+                        id: 1,
+                        title: 'Avlod orasidagi ta\'sir',
+                        description: 'Turkman, rus va Markaziy Osiyo adabiyotlarining bir-biriga ta\'siri',
+                        fullText: 'Adabiy tarixchilar XIX asrdan boshlab turkman va rus adabiyotlarining bir-biriga muhim ta\'sir koʻrsatib kelganini ta\'kidlaydi. Bu ta\'sir muallif uslubini, stilistikasini va adabiy asarlarning mavzularini oʻzgartirdi.'
+                    },
+                    {
+                        id: 2,
+                        title: 'Klassik adabiyotning xazinasi',
+                        description: 'Adas Gadab, Muhammad Nasir Qoymli va boshqalarning adabiy mirosi',
+                        fullText: 'Adas Gadab XIX asrning adabiy shaxslari orasida sheʻriyat tilini oʻz tasavvuriga koʻra yangilashtirish orqali yo\'l ochdi. Uning asarlarida Markaziy Osiyoning filologiyasining koʻp jihatlari eski so\'zlar orqali aks ettiriladi.'
+                    },
+                    {
+                        id: 3,
+                        title: 'Filologik masalalar',
+                        description: 'Til rivojlantirish va adabiy normalar tadqiqoti',
+                        fullText: 'Filologiyaning asosiy vazifasi tilning turli davrlarda va kommunikativ kontekstda qanday oʻzgarishini tushunishdan iborat. Adabiy normalar hayot uslubi bilan taʼsirlanadi va madaniy qiymatlarni aks ettiradi.'
+                    },
+                    {
+                        id: 4,
+                        title: 'Soʻz tahlili va semantika',
+                        description: 'Soʻzning maʼnosi va ahamiyatini oʻrganiш',
+                        fullText: 'Semantikaning asosiy maqsadi soʻzlarning chuqur maʼnisini topish va ularning turli adabiy kontekstda qanday ishlatilishini tushunishdir.'
+                    },
+                    {
+                        id: 5,
+                        title: 'Adabiy oqimlarning rivojlanishi',
+                        description: 'Adabiy uslublar va janrlarining evolyutsiyasi',
+                        fullText: 'Adabiy janrlar turli davrlarin talabiga moʻtanosib rivojlanib va transformatsiya boʻldi. Sheʻriyat, nasriy, romanlar va drama har bir davr rivojlanishining turli bosqichlaridan oʻtdi.'
+                    }
+                ]
+            }
+        };
+
+        const langMap = {
+            tk: 'tk-TM',
+            ru: 'ru-RU',
+            en: 'en-US',
+            kk: 'kk-KZ',
+            uz: 'uz-UZ'
+        };
+
+        let currentLanguage = 'tk';
+        let selectedContentIndex = 0;
+        let isPlaying = false;
+        let volume = 1;
+
+        // Initialize
+        function init() {
+            renderLanguageButtons();
+            renderContent();
+            attachEventListeners();
+        }
+
+        function renderLanguageButtons() {
+            const container = document.getElementById('langButtons');
+            const langs = { tk: '🇹🇲', ru: '🇷🇺', en: '🇬🇧', kk: '🇰🇿', uz: '🇺🇿' };
+            
+            container.innerHTML = Object.entries(langs).map(([code, flag]) => 
+                `<button class="lang-btn ${code === currentLanguage ? 'active' : ''}" data-lang="${code}">${flag} ${code.toUpperCase()}</button>`
+            ).join('');
+
+            container.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    currentLanguage = e.target.dataset.lang;
+                    renderLanguageButtons();
+                    renderContent();
+                    updateUI();
+                });
+            });
+        }
+
+        function renderContent() {
+            const data = translations[currentLanguage];
+            document.getElementById('pageTitle').textContent = data.title;
+            document.getElementById('subtitle').textContent = data.subtitle;
+            document.getElementById('searchInput').placeholder = data.search;
+            document.getElementById('chatInput').placeholder = data.chat;
+            document.getElementById('emptyText').textContent = data.empty;
+
+            const grid = document.getElementById('contentGrid');
+            grid.innerHTML = data.topics.map((topic, idx) => `
+                <div class="content-card ${idx === 0 ? 'active' : ''}" data-index="${idx}">
+                    <h3>${topic.title}</h3>
+                    <p>${topic.description}</p>
+                    <div class="audio-badge">🎤 Audio kontenti</div>
+                </div>
+            `).join('');
+
+            grid.querySelectorAll('.content-card').forEach(card => {
+                card.addEventListener('click', (e) => {
+                    document.querySelectorAll('.content-card').forEach(c => c.classList.remove('active'));
+                    card.classList.add('active');
+                    selectedContentIndex = parseInt(card.dataset.index);
+                    updateUI();
+                });
+            });
+
+            updateUI();
+        }
+
+        function updateUI() {
+            const data = translations[currentLanguage].topics[selectedContentIndex];
+            const section = document.getElementById('audioSection');
+            
+            if (data) {
+                document.getElementById('audioTitle').textContent = data.title;
+                document.getElementById('audioText').textContent = data.fullText;
+                section.style.display = 'block';
+            }
+        }
+
+        function attachEventListeners() {
+            document.getElementById('searchInput').addEventListener('input', (e) => {
+                const query = e.target.value.toLowerCase();
+                const data = translations[currentLanguage];
+                document.querySelectorAll('.content-card').forEach(card => {
+                    const idx = parseInt(card.dataset.index);
+                    const topic = data.topics[idx];
+                    const match = topic.title.toLowerCase().includes(query) || topic.description.toLowerCase().includes(query);
+                    card.style.display = match ? 'block' : 'none';
+                });
+            });
+
+            document.getElementById('playBtn').addEventListener('click', () => {
+                const data = translations[currentLanguage].topics[selectedContentIndex];
+                if (isPlaying) {
+                    window.speechSynthesis.cancel();
+                    isPlaying = false;
+                    document.getElementById('playBtn').textContent = '▶';
+                } else {
+                    speakText(data.fullText);
+                }
+            });
+
+            document.getElementById('volumeBtn').addEventListener('click', () => {
+                const slider = document.getElementById('volumeSlider');
+                slider.classList.toggle('show');
+            });
+
+            document.getElementById('volumeSlider').addEventListener('change', (e) => {
+                volume = parseFloat(e.target.value);
+            });
+
+            document.getElementById('sendBtn').addEventListener('click', sendMessage);
+            document.getElementById('chatInput').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') sendMessage();
+            });
+        }
+
+        function speakText(text) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = langMap[currentLanguage];
+                utterance.rate = 1;
+                utterance.pitch = 1;
+                utterance.volume = volume;
+                
+                utterance.onstart = () => {
+                    isPlaying = true;
+                    document.getElementById('playBtn').textContent = '⏸';
+                };
+                utterance.onend = () => {
+                    isPlaying = false;
+                    document.getElementById('playBtn').textContent = '▶';
+                };
+                
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        async function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const text = input.value.trim();
+            if (!text) return;
+
+            const messagesDiv = document.getElementById('chatMessages');
+            
+            // Remove empty state
+            messagesDiv.classList.remove('empty');
+            messagesDiv.innerHTML += `
+                <div class="message user">
+                    <div class="message-content">${text}</div>
+                </div>
+            `;
+
+            input.value = '';
+
+            // Show loading
+            messagesDiv.innerHTML += `
+                <div class="message assistant">
+                    <div class="message-content"><span class="loader"></span></div>
+                </div>
+            `;
+
+            try {
+                const response = await fetch('https://api.anthropic.com/v1/messages', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        model: 'claude-sonnet-4-20250514',
+                        max_tokens: 1000,
+                        messages: [{ role: 'user', content: text }]
+                    })
+                });
+
+                const data = await response.json();
+                const aiResponse = data.content[0].text;
+
+                // Remove loader
+                messagesDiv.querySelectorAll('.loader').forEach(el => el.parentElement.parentElement.remove());
+
+                // Add AI response
+                messagesDiv.innerHTML += `
+                    <div class="message assistant">
+                        <div class="message-content">${aiResponse}</div>
+                    </div>
+                `;
+            } catch (error) {
+                messagesDiv.querySelectorAll('.loader').forEach(el => el.parentElement.parentElement.remove());
+                messagesDiv.innerHTML += `
+                    <div class="message assistant">
+                        <div class="message-content">Jawabyň berýän ýalnyşlygy ýüze çykydy. Gaýtadan synanyp görüň.</div>
+                    </div>
+                `;
+            }
+
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        init();
+    </script>
+</body>
+</html>
